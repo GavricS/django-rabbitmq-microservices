@@ -1,5 +1,11 @@
 FROM python:3.10
 
-ADD main.py .
+WORKDIR /app
 
-CMD ["python", "./main.py"]
+COPY ./app .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
