@@ -1,4 +1,0 @@
-django
-python-decouple
-pymysql
-cryptography

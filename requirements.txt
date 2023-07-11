@@ -1,0 +1,9 @@
+django==4.2.3 
+cryptography==41.0.2
+pymysql==1.1.0
+python-decouple==3.8
+asgiref==3.7.2
+cffi==1.15.1
+pycparser==2.21
+sqlparse==0.4.4
+typing_extensions==4.7.1
