@@ -6,7 +6,10 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - database_order
+      database_order:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       - MYSQL_HOST=database_order
       - MYSQL_DATABASE=${DATABASE_NAME_ORDER}
@@ -27,6 +30,23 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+        # test: [ "CMD", "nc", "-z", "localhost", "15672" ]
+        test: "mysql --user=root --password=${DATABASE_PASSWORD_ROOT} --execute \"SHOW DATABASES;\""
+        interval: 10s
+        timeout: 15s
+        retries: 5
+  rabbitmq:
+    build: rabbitmq/.
+    container_name: rabbitmq
+    ports:
+        - 15672:15672
+        - 5672:5672
+    healthcheck:
+        test: ["CMD", "curl", "-f", "localhost:15672"]
+        interval: 5s
+        timeout: 15s
+        retries: 3
 
 volumes:
   mysql_data:
