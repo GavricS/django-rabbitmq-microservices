@@ -1,8 +1,8 @@
 version: '3'
 services:
-  web:
+  order:
     build:
-      context: .
+      context: order/.
     ports:
       - 8000:8000
     depends_on:
@@ -17,7 +17,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=${DATABASE_PASSWORD_ROOT}
     volumes:
-      - ./app:/app
+      - ./order/app:/app
   database_order:
     image: mysql:latest
     ports:
@@ -31,14 +31,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-        # test: [ "CMD", "nc", "-z", "localhost", "15672" ]
         test: "mysql --user=root --password=${DATABASE_PASSWORD_ROOT} --execute \"SHOW DATABASES;\""
         interval: 10s
         timeout: 15s
         retries: 5
   rabbitmq:
     build: rabbitmq/.
-    container_name: rabbitmq
     ports:
         - 15672:15672
         - 5672:5672
