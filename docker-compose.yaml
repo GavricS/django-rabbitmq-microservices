@@ -46,7 +46,7 @@ services:
         test: ["CMD", "curl", "-f", "localhost:15672"]
         interval: 5s
         timeout: 15s
-        retries: 3
+        retries: 5
 
 volumes:
   mysql_data:
