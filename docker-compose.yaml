@@ -10,33 +10,43 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    environment:
-      - MYSQL_HOST=database_order
-      - MYSQL_DATABASE=${DATABASE_NAME_ORDER}
-      - MYSQL_PORT=${DATABASE_PORT}
+    environment: # TODO use env file...
+      - MYSQL_HOST=${DATABASE_ORDER_HOST}
+      - MYSQL_DATABASE=${DATABASE_ORDER_NAME}
+      - MYSQL_PORT=${DATABASE_ORDER_PORT}
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD_ROOT}
+      - MYSQL_PASSWORD=${DATABASE_ORDER_PASSWORD_ROOT}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
     volumes:
       - ./order/app:/app
   database_order:
     image: mysql:latest
+    container_name: ${DATABASE_ORDER_HOST}
     ports:
       - 3306:3306
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD_ROOT}
-      - MYSQL_DATABASE=${DATABASE_NAME_ORDER}
-      - MYSQL_USER=${DATABASE_USER}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ORDER_PASSWORD_ROOT}
+      - MYSQL_DATABASE=${DATABASE_ORDER_NAME}
+      - MYSQL_USER=${DATABASE_ORDER_USER}
+      - MYSQL_PASSWORD=${DATABASE_ORDER_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-        test: "mysql --user=root --password=${DATABASE_PASSWORD_ROOT} --execute \"SHOW DATABASES;\""
+        test: "mysql --user=root --password=${DATABASE_ORDER_PASSWORD_ROOT} --execute \"SHOW DATABASES;\""
         interval: 10s
         timeout: 15s
         retries: 5
+  adminer:
+    image: adminer:latest
+    ports:
+        - 8080:8080
+    depends_on:
+      - database_order
+    restart: always
   rabbitmq:
     build: rabbitmq/.
+    container_name: ${RABBITMQ_HOST}
     ports:
         - 15672:15672
         - 5672:5672
