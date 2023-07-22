@@ -1,6 +1,6 @@
 from django.db import models
 
 class Order(models.Model):
-    productId = models.PositiveBigIntegerField() # TODO relationship
+    product_id = models.PositiveBigIntegerField()
     quantity = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
