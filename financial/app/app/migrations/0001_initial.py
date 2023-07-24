@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Invoice',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order_id', models.PositiveBigIntegerField()),
+                ('order_id', models.PositiveBigIntegerField(unique=True)),
                 ('total', models.PositiveIntegerField()),
                 ('status', models.CharField(max_length=255)),
             ],
