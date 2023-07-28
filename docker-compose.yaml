@@ -17,18 +17,14 @@ services:
         - 8080:8080
     depends_on:
       - database_order
+      - database_financial
+      - database_warehouse
     restart: always
   database_order:
     image: mysql:latest
     container_name: ${DATABASE_ORDER_HOST}
-    ports: # TODO not needed?
-      - 3306:3306
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_ORDER_PASSWORD_ROOT}
-      - MYSQL_DATABASE=${DATABASE_ORDER_NAME}
-      - MYSQL_USER=${DATABASE_ORDER_USER}
-      - MYSQL_PASSWORD=${DATABASE_ORDER_PASSWORD}
+    env_file: .env
     volumes:
       - mysql_data_order:/var/lib/mysql
     healthcheck:
@@ -46,26 +42,14 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    environment: # TODO use env file...
-      - MYSQL_HOST=${DATABASE_ORDER_HOST}
-      - MYSQL_DATABASE=${DATABASE_ORDER_NAME}
-      - MYSQL_PORT=${DATABASE_ORDER_PORT}
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=${DATABASE_ORDER_PASSWORD_ROOT}
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
+    env_file: .env
     volumes:
       - ./order/app:/app
   database_financial:
     image: mysql:latest
     container_name: ${DATABASE_FINANCIAL_HOST}
-    ports: # TODO not needed?
-      - 33060:3306
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_FINANCIAL_PASSWORD_ROOT}
-      - MYSQL_DATABASE=${DATABASE_FINANCIAL_NAME}
-      - MYSQL_USER=${DATABASE_FINANCIAL_USER}
-      - MYSQL_PASSWORD=${DATABASE_FINANCIAL_PASSWORD}
+    env_file: .env
     volumes:
       - mysql_data_financial:/var/lib/mysql
     healthcheck:
@@ -83,26 +67,14 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    environment: # TODO use env file...
-      - MYSQL_HOST=${DATABASE_FINANCIAL_HOST}
-      - MYSQL_DATABASE=${DATABASE_FINANCIAL_NAME}
-      - MYSQL_PORT=${DATABASE_FINANCIAL_PORT}
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=${DATABASE_FINANCIAL_PASSWORD_ROOT}
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
+    env_file: .env
     volumes:
       - ./financial/app:/app
   database_warehouse:
     image: mysql:latest
     container_name: ${DATABASE_WAREHOUSE_HOST}
-    ports: # TODO not needed?
-      - 3308:3306
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_WAREHOUSE_PASSWORD_ROOT}
-      - MYSQL_DATABASE=${DATABASE_WAREHOUSE_NAME}
-      - MYSQL_USER=${DATABASE_WAREHOUSE_USER}
-      - MYSQL_PASSWORD=${DATABASE_WAREHOUSE_PASSWORD}
+    env_file: .env
     volumes:
       - mysql_data_warehouse:/var/lib/mysql
     healthcheck:
@@ -120,16 +92,9 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    environment: # TODO use env file...
-      - MYSQL_HOST=${DATABASE_WAREHOUSE_HOST}
-      - MYSQL_DATABASE=${DATABASE_WAREHOUSE_NAME}
-      - MYSQL_PORT=${DATABASE_WAREHOUSE_PORT}
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=${DATABASE_WAREHOUSE_PASSWORD_ROOT}
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
+    env_file: .env
     volumes:
       - ./warehouse/app:/app
-
 
 volumes:
   mysql_data_order:
