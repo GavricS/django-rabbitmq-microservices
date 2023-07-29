@@ -11,7 +11,7 @@ class InvoiceStatusSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = ['status']
 
-    def validate(self, data):#TODO validate value?
+    def validate(self, data):
         if 'status' not in data:
             raise serializers.ValidationError("The 'status' field is required.")
         return data

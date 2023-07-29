@@ -1,6 +1,11 @@
 from django.db import models
 
 class Invoice(models.Model):
+    class StatusChoices(models.TextChoices):
+        INCOMPLETE = 'incomplete', 'Incomplete'
+        WAITING = 'waiting', 'Waiting'
+        COMPLETE = 'complete', 'Complete'
+
     order_id = models.PositiveBigIntegerField(unique=True)
     total = models.PositiveIntegerField()
-    status = models.CharField(max_length=255)# TODO status value see https://docs.djangoproject.com/en/4.2/ref/models/fields/#enumeration-types
+    status = models.CharField(max_length=255, choices=StatusChoices.choices, default=StatusChoices.INCOMPLETE)

@@ -25,7 +25,6 @@ class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 class OrderCheckoutView(APIView):
     def post(self, request, pk, format=None):
-        print("DEBUG in order checkout endpoint", flush=True)
         # find order
         try:
             order = Order.objects.get(pk=pk)
@@ -38,7 +37,7 @@ class OrderCheckoutView(APIView):
         serialized_order_data['data_type'] = MESSAGE_TYPE_ORDER_CHECKOUT
 
         # create connection and channel
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=config('RABBITMQ_HOST')))#TODO make sure there is no potential deadlock - inspect the BlockingConnection class for more info
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=config('RABBITMQ_HOST')))
         channel = connection.channel()
 
         # declare exchanges and queue
@@ -56,24 +55,23 @@ class OrderCheckoutView(APIView):
         result = None
         # define on message callback
         def on_message_callback(channel, method, properties, body):
-            nonlocal result#, request_processed
-            # TODO maybe additional message confirmation logic needed?
-            print("[.] Checkout successful", flush=True)
+            nonlocal result
             message_body = json.loads(body)
-            print("DEBUG order: response body: ", body, flush=True)
-            result = message_body
+
+            result = None if not message_body["error"] else message_body["error"]
 
         # wait for response (blocking)
         channel.basic_consume(queue=QUEUE_ORDER_NAME, on_message_callback=on_message_callback, auto_ack=True)
 
         try:
-            channel.connection.process_data_events(time_limit=20)
+            channel.connection.process_data_events(time_limit=config('ORDER_CHECKOUT_ENDPOINT_TIME_LIMIT', cast=int))
         except pika.exceptions.AMQPError as exception:
-            print(f"AMQP error: {exception}")# TODO error handling
+            print(f"AMQP error: {exception}")
 
         # free resources
         channel.close()
         connection.close()
 
         # return response
-        return Response(result, status=status.HTTP_200_OK)
+        response_status = status.HTTP_204_NO_CONTENT if not result else status.HTTP_500_INTERNAL_SERVER_ERROR
+        return Response(result, response_status)

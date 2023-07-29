@@ -27,11 +27,9 @@ def process_invoice():
 
     print(f"[x] Financial worker active and awaiting messages from {consts.QUEUE_FINANCIAL_NAME}", flush=True)
 
-    # wait for message TODO is needed?
-    channel.basic_consume(queue=consts.QUEUE_FINANCIAL_NAME, on_message_callback=on_message_callback, auto_ack=True)
-
     # consume messages
     try:
+        channel.basic_consume(queue=consts.QUEUE_FINANCIAL_NAME, on_message_callback=on_message_callback, auto_ack=True)
         channel.start_consuming()
     except pika.exceptions.AMQPError as exception:
             print(f"AMQP error: {exception}", flush=True)
@@ -55,7 +53,6 @@ def on_message_callback(channel, method, properties, body):
 # handle message sent on order checkout
 def handle_order_checkout(message_data, channel):
     order_id = message_data['order_id']
-    # print(f'financial worker received message {consts.MESSAGE_TYPE_ORDER_CHECKOUT}; message data: {message_data}', flush=True)#DEBUG TODO
     print(f"[.] Creating invoice for order #{order_id}", flush=True)
 
     data = {
@@ -76,9 +73,9 @@ def handle_order_checkout(message_data, channel):
 # handle message sent upon product stock confirmation
 def handle_stock_confirmation(message_data, channel):
     order_id = message_data['order_id']
-    # print(f'financial worker received message {consts.MESSAGE_TYPE_STOCK_CONFIRM}; message data: {message_data}', flush=True)#DEBUG TODO
+
     message_data['invoice_confirmed'] = False
-    message_data['error'] = ''
+    message_data['error'] = None
     message_data['data_type'] = consts.MESSAGE_TYPE_INVOICE_CONFIRM
 
     # if there is not enough stock for the given order, the previously created invoice should be deleted

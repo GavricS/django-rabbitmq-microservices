@@ -28,11 +28,9 @@ def process_invoice():
 
     print(f"[x] Warehouse worker active and awaiting messages from {consts.QUEUE_WAREHOUSE_NAME}")
 
-    # wait for message TODO is needed?
-    channel.basic_consume(queue=consts.QUEUE_WAREHOUSE_NAME, on_message_callback=on_message_callback, auto_ack=True)
-
     # consume messages
     try:
+        channel.basic_consume(queue=consts.QUEUE_WAREHOUSE_NAME, on_message_callback=on_message_callback, auto_ack=True)
         channel.start_consuming()
     except pika.exceptions.AMQPError as exception:
         print(f"AMQP error: {exception}", flush=True)
@@ -54,7 +52,6 @@ def on_message_callback(channel, method, properties, body):
 
 # handle message sent on order checkout
 def handle_order_checkout(message_data, channel):
-    # print(f'warehouse worker received message {MESSAGE_TYPE_ORDER_CHECKOUT}; message data: {message_data}', flush=True)#DEBUG TODO
     product_id = message_data['product_id']
     print(f"[.] Requesting stock availability for product #{product_id}", flush=True)
     
@@ -69,7 +66,6 @@ def handle_order_checkout(message_data, channel):
             message_data['in_stock'] = True
         message_data['available_stock'] = product_stock
     except Exception as exception:
-        # TODO error handling...
         print(f"[x] Failed getting stock for product #{product_id}: ", exception, flush=True)
         return
 
@@ -79,7 +75,6 @@ def handle_order_checkout(message_data, channel):
 
 # handle message sent upon invoice status confirmation
 def handle_invoice_confirmation(message_data, channel):
-    # print(f'warehouse worker received message {MESSAGE_TYPE_INVOICE_CONFIRM}; message data: {message_data}', flush=True)#DEBUG TODO
     product_id = message_data['product_id']
     print(f"[.] Invoice updated, updating stock for product #{product_id}", flush=True)
 

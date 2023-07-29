@@ -24,7 +24,11 @@ services:
     image: mysql:latest
     container_name: ${DATABASE_ORDER_HOST}
     restart: always
-    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ORDER_PASSWORD_ROOT}
+      - MYSQL_DATABASE=${DATABASE_ORDER_NAME}
+      - MYSQL_USER=${DATABASE_ORDER_USER}
+      - MYSQL_PASSWORD=${DATABASE_ORDER_PASSWORD}
     volumes:
       - mysql_data_order:/var/lib/mysql
     healthcheck:
@@ -49,7 +53,11 @@ services:
     image: mysql:latest
     container_name: ${DATABASE_FINANCIAL_HOST}
     restart: always
-    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_FINANCIAL_PASSWORD_ROOT}
+      - MYSQL_DATABASE=${DATABASE_FINANCIAL_NAME}
+      - MYSQL_USER=${DATABASE_FINANCIAL_USER}
+      - MYSQL_PASSWORD=${DATABASE_FINANCIAL_PASSWORD}
     volumes:
       - mysql_data_financial:/var/lib/mysql
     healthcheck:
@@ -74,7 +82,11 @@ services:
     image: mysql:latest
     container_name: ${DATABASE_WAREHOUSE_HOST}
     restart: always
-    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_WAREHOUSE_PASSWORD_ROOT}
+      - MYSQL_DATABASE=${DATABASE_WAREHOUSE_NAME}
+      - MYSQL_USER=${DATABASE_WAREHOUSE_USER}
+      - MYSQL_PASSWORD=${DATABASE_WAREHOUSE_PASSWORD}
     volumes:
       - mysql_data_warehouse:/var/lib/mysql
     healthcheck:
