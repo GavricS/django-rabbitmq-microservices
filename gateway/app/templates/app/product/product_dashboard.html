@@ -1,0 +1,20 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+{% block title %}
+  {{ block.super }} - Products
+{% endblock %}
+{% block content %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/product.css' %}">
+{% endblock %}
+{% if error %}
+<h3 class="error">{{error}}</h3>
+{% else %}
+<h1>Products:</h1>
+<div class="item-list">
+    {% for product in products %}
+        {% include 'app/product/product_detail.html' with product=product %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

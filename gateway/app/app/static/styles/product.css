@@ -1,0 +1,11 @@
+.input-quantity{
+    width: 5em;
+}
+
+.submit-button-container{
+    align-self: center;
+}
+
+.item-container.product-container{
+    width: 200px;
+}

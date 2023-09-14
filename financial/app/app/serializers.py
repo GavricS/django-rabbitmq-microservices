@@ -15,3 +15,6 @@ class InvoiceStatusSerializer(serializers.ModelSerializer):
         if 'status' not in data:
             raise serializers.ValidationError("The 'status' field is required.")
         return data
+
+class OrderIdsSerializer(serializers.Serializer):
+    order_ids = serializers.ListField(child=serializers.IntegerField())

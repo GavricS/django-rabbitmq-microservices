@@ -49,6 +49,23 @@ services:
     env_file: .env
     volumes:
       - ./order/app:/app
+  gateway:
+    build:
+      context: gateway/.
+    ports:
+      - 8003:8000
+    depends_on:
+      database_order:
+        condition: service_healthy
+      database_financial:
+        condition: service_healthy
+      database_warehouse:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file: .env
+    volumes:
+      - ./gateway/app:/app
   database_financial:
     image: mysql:latest
     container_name: ${DATABASE_FINANCIAL_HOST}

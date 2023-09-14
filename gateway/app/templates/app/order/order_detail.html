@@ -1,0 +1,15 @@
+<div class="item-container order-container">
+    <div class="data id"><b>order #{{ order.id }}</b></div>
+    <div class="data"><b>Product ID</b>: {{ order.product_id }}</div>
+    <div class="data"><b>quantity</b>: {{ order.quantity }}</div>
+    <div class="data"><b>price</b>: {{ order.price }}</div>
+    {% if order.checkout_status != None %}
+        <div class="data"><b>checkout</b>: {{ order.checkout_status }}</div>
+    {% else %}
+        <form action="{% url 'order-checkout' order_id=order.id %}" method="post">
+            <div class="data"><b>checkout</b>:
+                    <button type="submit">checkout</button>
+            </div>
+        </form>
+    {% endif %}
+</div>

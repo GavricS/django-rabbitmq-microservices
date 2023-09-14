@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head>
+    {% load static %}
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    {% block styles %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+</head>
+<body>
+    {% include 'nav.html' %}
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,15 @@
+<form action="{% url 'order-create' %}" method="post">
+    <div class="item-container product-container">
+            <div class="data id" name="id" id="id"><b>product #{{ product.id }}</b></div>
+            <div class="data"><b>stock</b>: {{ product.stock }}</div>
+            <div class="data" name="price" id="price"><b>price</b>: {{ product.price }}</div>
+            <div class="data"><b>order quantity</b>:
+                <input type="number" name="quantity" id="quantity" class="input-quantity" min="1">
+            </div>
+            <input type="text" name="id" id="id" value="{{ product.id }}" hidden>
+            <input type="text" name="price" id="price" value="{{ product.price }}" hidden>
+            <div class="data submit-button-container">
+                <button type="submit">order</button>
+            </div>
+    </div>
+</form>

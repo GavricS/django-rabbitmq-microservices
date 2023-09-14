@@ -14,22 +14,6 @@ class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-# @api_view(['PUT'])
-# def update_product_stock(request, pk):
-#     # return Response('success', status=status.HTTP_200_OK)
-#     try:
-#         product = Product.objects.get(pk=pk)
-#     except Product.DoesNotExist:
-#         return Response(status=404)
-
-#     serializer = ProductSerializer(product, data=request.data)
-
-#     if serializer.is_valid():
-#         serializer.save()
-
-#         return Response(serializer.data)
-
-#     return Response(serializer.errors, status=400)
 class UpdateProductStockView(APIView):
     def put(self, request, pk, format=None):
         try:

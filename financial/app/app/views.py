@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import InvoiceSerializer, InvoiceStatusSerializer
+from .serializers import InvoiceSerializer, InvoiceStatusSerializer, OrderIdsSerializer
 from rest_framework import generics
 from .models import Invoice
 from rest_framework.views import APIView
@@ -38,3 +38,17 @@ class UpdateDeleteInvoiceByOrderIdView(APIView):
         
         product.delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+class GetInvoicesByOrderIdView(APIView):
+    def post(self, request, format=None):
+        serializer = OrderIdsSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        order_ids = serializer.validated_data['order_ids']
+
+        invoices = Invoice.objects.filter(order_id__in=order_ids)
+
+        serializer = InvoiceSerializer(invoices, many=True)
+
+        return Response(serializer.data)

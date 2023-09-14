@@ -1,0 +1,50 @@
+body{
+    background-color: ivory;
+}
+
+nav{
+    background-color: rgb(163, 196, 188);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+nav a{
+    font-size: 1.5em;
+    text-decoration: underline;
+    color: inherit;
+    font-weight: bolder;
+    margin: 0.5em 1.5em 0.5em 1.5em;
+}
+
+h1{
+    font-size: 2em;
+    font-family: Monospaced;
+    margin-bottom: 0.25em;
+}
+
+.item-list{
+    display: flex;
+}
+
+.item-container{
+    width: fit-content;
+    background-color: rgb(163, 196, 188);
+    border: 4px solid black;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5em 1em 0.5em 0;
+}
+
+.data{
+    margin: 0.25em 0.5em 0.25em 0.5em;
+}
+
+.id{
+    text-decoration: underline;
+}
+
+.error{
+    color: red;
+}
