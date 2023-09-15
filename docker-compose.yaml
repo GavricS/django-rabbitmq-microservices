@@ -46,7 +46,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    env_file: .env
+    env_file: order/.env
     volumes:
       - ./order/app:/app
   gateway:
@@ -63,7 +63,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    env_file: .env
+    env_file: gateway/.env
     volumes:
       - ./gateway/app:/app
   database_financial:
@@ -92,7 +92,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    env_file: .env
+    env_file: financial/.env
     volumes:
       - ./financial/app:/app
   database_warehouse:
@@ -121,7 +121,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    env_file: .env
+    env_file: warehouse/.env
     volumes:
       - ./warehouse/app:/app
 
