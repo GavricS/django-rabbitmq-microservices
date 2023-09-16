@@ -84,6 +84,9 @@ DATABASES = {
         "PASSWORD": config('DATABASE_ORDER_PASSWORD'),
         "HOST": config('DATABASE_ORDER_HOST'),
         "PORT": config('DATABASE_ORDER_PORT'),
+        "TEST": {
+            'NAME': 'test_order',
+        },
     }
 }
 
