@@ -216,7 +216,7 @@ class OrderCheckoutSerializerTestCase(TestCase):
         self.assertFalse(serializer.is_valid())
         self.assertIn('price', serializer.errors)
 
-    def test_order_checkout_serializer_update_missing_product_ok(self):
+    def test_order_checkout_serializer_update_missing_product_id_ok(self):
         existing_order_data = {
             'id': 1,
             'product_id': 3,
