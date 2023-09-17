@@ -6,15 +6,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = '__all__'
 
-class InvoiceStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Invoice
-        fields = ['status']
-
-    def validate(self, data):
-        if 'status' not in data:
-            raise serializers.ValidationError("The 'status' field is required.")
-        return data
+class InvoiceStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=Invoice.StatusChoices.choices)
 
 class OrderIdsSerializer(serializers.Serializer):
     order_ids = serializers.ListField(child=serializers.IntegerField())

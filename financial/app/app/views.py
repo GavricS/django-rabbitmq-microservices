@@ -19,24 +19,32 @@ class InvoiceRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 class UpdateDeleteInvoiceByOrderIdView(APIView):
     def put(self, request, order_id, format=None):
         try:
-            product = Invoice.objects.get(order_id=order_id)
+            invoice = Invoice.objects.get(order_id=order_id)
         except Invoice.DoesNotExist:
             return Response({"error": "Invoice not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        extra_fields = set(request.data.keys()) - {'status'}
+        if extra_fields:
+            return Response(
+                {"error": f"Unexpected fields: {', '.join(extra_fields)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        serializer = InvoiceStatusSerializer(product, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        serializer = InvoiceStatusSerializer(data=request.data)
+        if serializer.is_valid():
+            invoice.status = serializer.validated_data['status']
+            invoice.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, order_id, format=None):
         try:
-            product = Invoice.objects.get(order_id=order_id)
+            invoice = Invoice.objects.get(order_id=order_id)
         except Invoice.DoesNotExist:
             return Response({"error": "Invoice not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        product.delete()
+        invoice.delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 class GetInvoicesByOrderIdView(APIView):
