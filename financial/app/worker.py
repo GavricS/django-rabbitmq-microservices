@@ -23,7 +23,7 @@ def process_invoice():
     channel.exchange_declare(exchange=consts.EXCHANGE_ORDER_NAME, exchange_type='direct', durable=False, auto_delete=False)
     channel.queue_declare(queue=consts.QUEUE_FINANCIAL_NAME, durable=False, auto_delete=False)
     channel.exchange_declare(exchange=consts.EXCHANGE_FINANCIAL_NAME, exchange_type='direct', durable=False, auto_delete=False)
-    channel.queue_bind(queue=consts.QUEUE_FINANCIAL_NAME, exchange=consts.EXCHANGE_ORDER_NAME, routing_key='')
+    channel.queue_bind(queue=consts.QUEUE_FINANCIAL_NAME, exchange=consts.EXCHANGE_ORDER_NAME, routing_key='ORDER_CHECKOUT_START')
 
     print(f"[x] Financial worker active and awaiting messages from {consts.QUEUE_FINANCIAL_NAME}", flush=True)
 
@@ -96,7 +96,7 @@ def handle_stock_confirmation(message_data, channel):
             print(f"[x] Invoice update for order #{order_id} failed: ", exception, flush=True)
 
     message = json.dumps(message_data)
-    channel.basic_publish(exchange=consts.EXCHANGE_FINANCIAL_NAME, routing_key='', body=message)
+    channel.basic_publish(exchange=consts.EXCHANGE_FINANCIAL_NAME, routing_key='ORDER_CHECKOUT_PROCESSED', body=message)
     print(f"[.] Message sent to {consts.EXCHANGE_FINANCIAL_NAME}", flush=True)
 
 # creates an invoice for the given order through the financial API

@@ -22,9 +22,9 @@ def process_invoice():
     # declare exchanges and queues
     channel.exchange_declare(exchange=consts.EXCHANGE_ORDER_NAME, exchange_type='direct', durable=False, auto_delete=False)
     channel.queue_declare(queue=consts.QUEUE_WAREHOUSE_NAME, durable=False, exclusive=False, auto_delete=False)
-    channel.queue_bind(queue=consts.QUEUE_WAREHOUSE_NAME, exchange=consts.EXCHANGE_ORDER_NAME, routing_key='')
+    channel.queue_bind(queue=consts.QUEUE_WAREHOUSE_NAME, exchange=consts.EXCHANGE_ORDER_NAME, routing_key='ORDER_CHECKOUT_START')
     channel.exchange_declare(exchange=consts.EXCHANGE_FINANCIAL_NAME, exchange_type='direct', durable=False, auto_delete=False)
-    channel.queue_bind(queue=consts.QUEUE_WAREHOUSE_NAME, exchange=consts.EXCHANGE_FINANCIAL_NAME, routing_key='')
+    channel.queue_bind(queue=consts.QUEUE_WAREHOUSE_NAME, exchange=consts.EXCHANGE_FINANCIAL_NAME, routing_key='ORDER_INVOICE_UPDATE')
 
     print(f"[x] Warehouse worker active and awaiting messages from {consts.QUEUE_WAREHOUSE_NAME}")
 
