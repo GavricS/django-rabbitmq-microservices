@@ -44,7 +44,7 @@ class OrderCheckoutView(APIView):
         channel.exchange_declare(exchange=EXCHANGE_ORDER_NAME, exchange_type='direct', durable=False, auto_delete=False)
         channel.queue_declare(queue=QUEUE_ORDER_NAME, durable=False, auto_delete=False)
         channel.exchange_declare(exchange=EXCHANGE_FINANCIAL_NAME, exchange_type='direct', durable=False, auto_delete=False)
-        channel.queue_bind(queue=QUEUE_ORDER_NAME, exchange=EXCHANGE_FINANCIAL_NAME, routing_key='ORDER_CHECKOUT_PROCESSED')
+        channel.queue_bind(queue=QUEUE_ORDER_NAME, exchange=EXCHANGE_FINANCIAL_NAME, routing_key='')
 
         # serialize message
         message = json.dumps(serialized_order_data)
