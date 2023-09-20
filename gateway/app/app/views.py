@@ -33,6 +33,9 @@ class OrderView(APIView):
         return response.json()
 
     def get_invoices_for_orders(self, order_ids):
+        if not len(order_ids):
+            return []
+
         api_url = config('GATEWAY_GET_INVOICES_ENDPOINT_URL')
         response = requests.post(api_url, data={'order_ids': order_ids})
 

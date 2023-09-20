@@ -14,6 +14,8 @@
 <div class="item-list">
     {% for product in products %}
         {% include 'app/product/product_detail.html' with product=product %}
+    {% empty %}
+        <h2>Currently no products available.</h2>
     {% endfor %}
 </div>
 {% endif %}

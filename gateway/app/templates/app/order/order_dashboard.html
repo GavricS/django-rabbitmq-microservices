@@ -14,6 +14,8 @@
 <div class="item-list">
     {% for order in orders %}
         {% include 'app/order/order_detail.html' with order=order %}
+    {% empty %}
+        <h2>Currently no orders available.</h2>
     {% endfor %}
 </div>
 {% endif %}
