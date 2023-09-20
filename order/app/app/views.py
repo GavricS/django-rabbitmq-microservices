@@ -58,7 +58,7 @@ class OrderCheckoutView(APIView):
             nonlocal result
             message_body = json.loads(body)
 
-            result = None if not message_body["error"] else message_body["error"]
+            result = None if not message_body["error"] else {'error': message_body["error"]}
 
         # wait for response (blocking)
         channel.basic_consume(queue=QUEUE_ORDER_NAME, on_message_callback=on_message_callback, auto_ack=True)

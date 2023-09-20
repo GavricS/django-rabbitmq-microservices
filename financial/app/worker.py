@@ -81,6 +81,7 @@ def handle_stock_confirmation(message_data, channel):
     # if there is not enough stock for the given order, the previously created invoice should be deleted
     if not message_data['in_stock']:
         print("[x] Insufficient stock - deleting invoice", flush=True)
+        message_data['error'] = 'Insufficient product stock - order checkout failed.'
         try:
             delete_invoice(order_id)
         except Exception as exception:
@@ -88,7 +89,7 @@ def handle_stock_confirmation(message_data, channel):
     # if there is enough stock for the given order, the status of the order invoice should be updated
     else:
         print(f"[.] Stock confirmed, updating invoice for order #{order_id}", flush=True)
-        data = {'status': 'waiting'}
+        data = {'status': 'complete'}
         try:
             update_invoice(order_id, data)
             message_data['invoice_confirmed'] = True

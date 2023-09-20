@@ -43,7 +43,7 @@ def on_message_callback(channel, method, properties, body):
     message_body = json.loads(body)
     message_type = message_body['data_type']
 
-# handle specific message types
+    # handle specific message types
     match message_type:
         case consts.MESSAGE_TYPE_ORDER_CHECKOUT:
             handle_order_checkout(message_body, channel)
@@ -75,6 +75,9 @@ def handle_order_checkout(message_data, channel):
 
 # handle message sent upon invoice status confirmation
 def handle_invoice_confirmation(message_data, channel):
+    if message_data['error']:
+        return
+
     product_id = message_data['product_id']
     print(f"[.] Invoice updated, updating stock for product #{product_id}", flush=True)
 
